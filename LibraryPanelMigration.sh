@@ -37,7 +37,10 @@ elements="$(($elements-1))"
 
 for i in $( eval echo {0..$elements} )
 do
-    PostBody="$(echo "$LibraryPanels" | jq ".result.elements["$i"]")"
+    
+    PostBody="$(echo "$LibraryPanels" | jq ".result.elements["$i"]")" 
+
+    PostBody=$(echo "$PostBody" | jq '.folderUid = "" | .meta.folderUid = "" | .folderId = 0')
 
     PostHeaders=("Authorization: Bearer $Grafana_Target_Token")
     response=$(curl -X POST "$Grafana_Target_Url/api/library-elements" -d "$PostBody" -H "${PostHeaders[@]}" -H "$ContentType")
